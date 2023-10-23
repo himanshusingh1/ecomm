@@ -1,0 +1,27 @@
+{   "theme_id": "T1",
+    "app_icon": "https://firebasestorage.googleapis.com/v0/b/al-sadan-ecom.appspot.com/o/appstore.png?alt=media&token=4e90c3b4-4a93-4621-8904-e18bac4e77c1&_gl=1*1g9i4mn*_ga*MTIxNzU0NTc5Ny4xNjkxNDc1NDUx*_ga_CW55HF8NVT*MTY5Nzk2NTYxOC4zMS4xLjE2OTc5NjU2NjIuMTYuMC4w",
+    "app_name": "Panda",
+    "app_budle_id": "com.omniful.debugapp",
+    "store_url": "https://wildforkfoods.com",
+    "primary_color":"#2C8335",
+    "splash_screen": "https://firebasestorage.googleapis.com/v0/b/al-sadan-ecom.appspot.com/o/Splash%20screen.png?alt=media&token=cb9c9cc5-f1f5-4b5e-807b-3db873d5faac&_gl=1*3mx8cn*_ga*MTIxNzU0NTc5Ny4xNjkxNDc1NDUx*_ga_CW55HF8NVT*MTY5Nzk2ODI4Ny4zMi4xLjE2OTc5NjgyOTguNDkuMC4w",
+    "tab_bar": {
+        "home": {
+            "selected_image":"https://i.ibb.co/94z669f/Property-1-Selected.png",
+            "unselected_image":"https://i.ibb.co/tpV0KxJ/Property-1-Unselected.png"
+        },
+        "all": {
+            "selected_image":"https://i.ibb.co/p3gk6NX/Property-1-Selected-1.png",
+            "unselected_image":"https://i.ibb.co/Pm1rxBw/Property-1-Unselected-1.png"
+        },
+        "cart": {
+            "selected_image":"https://i.ibb.co/JRtLkSd/Property-1-selected.png",
+            "unselected_image":"https://i.ibb.co/09nPm0X/Property-1-unselected.png"
+        },
+        "account": {
+            "selected_image":"https://i.ibb.co/WcK3p2f/Property-1-selected.png",
+            "unselected_image":"https://i.ibb.co/F32p7CF/Property-1-unselected.png"
+        }
+    }
+}
+

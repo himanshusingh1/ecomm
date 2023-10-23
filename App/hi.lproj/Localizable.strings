@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Ecommerce
+
+  Created by Himanshu Singh on 22/10/23.
+  
+*/
+"Home" = "Home";
+"Account" = "Account";
+"Cart" = "Cart";
+"All" = "All";
