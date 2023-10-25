@@ -212,6 +212,7 @@ class Initial: UITabBarController,UITabBarControllerDelegate {
             self.subviews.first?.alpha = 0
         }
     }
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         object_setClass(self.tabBar, CustomTabBar.self)
