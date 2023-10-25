@@ -25,6 +25,7 @@ class BaseViewController: UIViewController {
     
     private lazy var noInternetView: ErrorView = {
         let view = ErrorView(title: "You are offline. Please try again!", image: Asset.error_dog, buttonTitle: "Retry", buttonAction: UIAction(handler: { [unowned self] _ in
+            checkForNetwork()
             self.refreshWebView(refreshControl)
         }))
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -43,9 +44,9 @@ class BaseViewController: UIViewController {
             webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         webview = webView
+        webview?.navigationDelegate = self
         addRefreshControl()
         addLoadingIndicator()
-        checkForNetwork()
     }
     
     override func viewDidLoad() {
@@ -132,21 +133,7 @@ extension BaseViewController {
 extension BaseViewController {
     private func checkForNetwork() {
         reachability = try? Reachability()
-        NotificationCenter.default.addObserver(self, selector: #selector(networkStatusChanged(_:)), name: .reachabilityChanged, object: reachability)
-        do {
-            try reachability?.startNotifier()
-        } catch {
-            print("Unable to start notifier")
-        }
-    }
-    
-    @objc private func networkStatusChanged(_ notification: Notification) {
-        guard let reachability = notification.object as? Reachability else { return }
-        if reachability.connection != .unavailable {
-            hideNoInternet()
-        } else {
-            showNoInternet()
-        }
+        reachability?.connection == .unavailable ? showNoInternet() : hideNoInternet()
     }
     
     func showNoInternet() {
@@ -182,5 +169,12 @@ extension BaseViewController: WKScriptMessageHandler {
                 print("Network Call Response: \(body)")
             }
         }
+    }
+}
+
+extension BaseViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        checkForNetwork()
+        decisionHandler(.allow)
     }
 }
