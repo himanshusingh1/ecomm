@@ -13,4 +13,6 @@ enum Asset {
     
     static let cart_selected: UIImage = UIImage(named: "cart_selected")!
     static let cart_unselected: UIImage = UIImage(named: "cart_un_selected")!
+    
+    static let error_dog: UIImage = UIImage(named: "errror.dog")!
 }
