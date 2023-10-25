@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Ecommerce
+
+  Created by Himanshu Singh on 22/10/23.
+  
+*/
+"Home" = "首页";
+"All" = "全部";
+"Cart" = "购物车";
+"Account" = "账户";
