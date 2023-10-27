@@ -123,7 +123,6 @@ extension BaseViewController {
             guard let self = self else { return }
             if webView.estimatedProgress > 0.3 {
                 self.activityIndicator.stopAnimating()
-                self.webViewObservation?.invalidate()
             }
         }
     }

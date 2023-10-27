@@ -18,6 +18,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
+        PushNotification.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         let navigation = navigationController
         navigation.setViewControllers([Initial()], animated: true)
         navigation.isNavigationBarHidden = true

@@ -152,6 +152,11 @@ func generateproject() {
 name: Ecommerce
 targets:
   MobileAppSourceCodeV1:
+    postBuildScripts:
+          - script: |
+             cd ${SRCROOT}
+             echo "POST BUILT SCRIPT"
+             ${PODS_ROOT}/FirebaseCrashlytics/run
     type: application
     platform: iOS
    
