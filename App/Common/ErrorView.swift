@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 class ErrorView: UIView {
-    let buttonTitle, title: String?
-    let buttonAction: UIAction?
-    let image: UIImage?
+    let buttonTitle, title: String
+    let buttonAction: UIAction
+    let image: UIImage
     
     init(title: String, image: UIImage, buttonTitle: String, buttonAction: UIAction) {
         self.title = title
@@ -22,14 +22,6 @@ class ErrorView: UIView {
         commonInit()
     }
     
-    override init(frame: CGRect) {
-        self.buttonTitle = nil
-        self.title = nil
-        self.image = nil
-        self.buttonAction = nil
-        super.init(frame: frame)
-        commonInit()
-    }
     
     private func commonInit() {
         self.addSubview(imageView)
@@ -67,19 +59,15 @@ class ErrorView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.numberOfLines = 0
-        if let title = title {
-            label.attributedText = NSAttributedString(string: title, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.P1])
-        }
+        label.attributedText = NSAttributedString(string: title, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedString.Key.foregroundColor: UIColor.P1])
         return label
     }()
     
     private lazy var tryAgainButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        if let buttonTitle = buttonTitle, let buttonAction = buttonAction {
-            button.setAttributedTitle( NSAttributedString(string: buttonTitle, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.P1]), for: .normal)
-            button.addAction(buttonAction, for: .touchUpInside)
-        }
+        button.setAttributedTitle( NSAttributedString(string: buttonTitle, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.P1]), for: .normal)
+        button.addAction(buttonAction, for: .touchUpInside)
         return button
     }()
 }

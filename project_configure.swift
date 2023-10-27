@@ -9,14 +9,16 @@ import Foundation
 
 struct Config: Codable {
     let appicon: String
+    let googlePlist: String
     let appName: String
     let bundleID: String
     let storeURL: String
     let primaryColor: String
+    let navbarColor: String
     let splashScreen: String
     let themeID: String
     let tabBar: TabBar
-
+    
     enum CodingKeys: String, CodingKey {
         case themeID = "theme_id"
         case appicon = "app_icon"
@@ -26,6 +28,8 @@ struct Config: Codable {
         case primaryColor = "primary_color"
         case splashScreen = "splash_screen"
         case tabBar = "tab_bar"
+        case googlePlist = "google_plist"
+        case navbarColor = "navigation_bar_color"
     }
 }
 struct TabBar: Codable {
@@ -33,7 +37,7 @@ struct TabBar: Codable {
 }
 struct TabbarItem: Codable {
     let selectedImage, unselectedImage: String
-
+    
     enum CodingKeys: String, CodingKey {
         case selectedImage = "selected_image"
         case unselectedImage = "unselected_image"
@@ -80,38 +84,49 @@ FileManager.default.createFile(atPath: merchantDataLocation + "/config.json", co
 
 //MARK: - Set InfoPlist Data
 class InfoPlistConfiguration {
-  enum UpdateInfoPlistKeyTypes: String, CaseIterable {
-    case launchScreen = "UILaunchStoryboardName"
-    case appName = "CFBundleDisplayName"
-    case bundleIdenitfier = "CFBundleIdentifier"
-    case webViewURL = "BaseWebviewURL"
-  }
-  func updateInfoPlist(for path: String, with merchant: Config) {
-    guard let infoDictionary = NSMutableDictionary(contentsOfFile: path) else {
-      print("Error reading Info.plist file.")
-      exit(1)
+    enum UpdateInfoPlistKeyTypes: String, CaseIterable {
+        case launchScreen = "UILaunchStoryboardName"
+        case appName = "CFBundleDisplayName"
+        case bundleIdenitfier = "CFBundleIdentifier"
+        case webViewURL = "BaseWebviewURL"
     }
-    UpdateInfoPlistKeyTypes.allCases.forEach { plistType in
-      switch plistType {
-      case .appName:
-        infoDictionary[plistType.rawValue] = merchant.appName
-      case .bundleIdenitfier:
-        infoDictionary[plistType.rawValue] = merchant.bundleID
-      case .webViewURL:
-        infoDictionary[plistType.rawValue] = merchant.storeURL
-      case .launchScreen:
-          infoDictionary[plistType.rawValue] = "Splash.storyboard"
-      }
+    func updateInfoPlist(for path: String, with merchant: Config) {
+        guard let infoDictionary = NSMutableDictionary(contentsOfFile: path) else {
+            print("Error reading Info.plist file.")
+            exit(1)
+        }
+        UpdateInfoPlistKeyTypes.allCases.forEach { plistType in
+            switch plistType {
+            case .appName:
+                infoDictionary[plistType.rawValue] = merchant.appName
+            case .bundleIdenitfier:
+                infoDictionary[plistType.rawValue] = merchant.bundleID
+            case .webViewURL:
+                infoDictionary[plistType.rawValue] = merchant.storeURL
+            case .launchScreen:
+                infoDictionary[plistType.rawValue] = "Splash.storyboard"
+            }
+        }
+        if infoDictionary.write(toFile: path, atomically: true) {
+            print(merchant)
+        } else {
+            print("Error writing Info.plist.")
+        }
     }
-    if infoDictionary.write(toFile: path, atomically: true) {
-      print(merchant)
-    } else {
-      print("Error writing Info.plist.")
-    }
-  }
 }
 let infopath = originalpath + "/App/Info.plist"
 InfoPlistConfiguration().updateInfoPlist(for: infopath, with: config)
+
+func downloadFirebaseConfigFile() {
+    let location = originalpath + "/App/" + "GoogleService-Info.plist"
+    try? FileManager.default.removeItem(atPath: location)
+    guard let url = URL(string: config.googlePlist) else { return }
+    let data = try! Data(contentsOf: url)
+    try? FileManager.default.createDirectory(atPath: originalpath + "/App", withIntermediateDirectories: true)
+    print(FileManager.default.createFile(atPath: location, contents: data))
+}
+
+downloadFirebaseConfigFile()
 
 
 //MARK: - Set App icon

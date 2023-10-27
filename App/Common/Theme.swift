@@ -16,6 +16,7 @@ struct Config: Codable {
     let splashScreen: String
     let themeID: String
     let tabBar: TabBar
+    let navbarColor: String
 
     enum CodingKeys: String, CodingKey {
         case themeID = "theme_id"
@@ -26,6 +27,7 @@ struct Config: Codable {
         case primaryColor = "primary_color"
         case splashScreen = "splash_screen"
         case tabBar = "tab_bar"
+        case navbarColor = "navigation_bar_color"
     }
 }
 struct TabBar: Codable {
@@ -184,4 +186,11 @@ extension UIColor {
         }
     
 
+}
+
+extension UIColor {
+    static var navbarColor: UIColor {
+        let config = readConfig()
+        return UIColor.init(hex: config.navbarColor)
+    }
 }

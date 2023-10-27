@@ -23,6 +23,26 @@ class BaseViewController: UIViewController {
     private var webViewObservation: NSKeyValueObservation?
     private let refreshControl = UIRefreshControl()
     
+    private lazy var baseStackView: UIStackView = {
+        let stackview = UIStackView()
+        stackview.translatesAutoresizingMaskIntoConstraints = false
+        stackview.axis = .vertical
+        stackview.alignment = .fill
+        stackview.distribution = .fill
+        stackview.spacing = 0
+        return stackview
+    }()
+    
+    private lazy var appNavbar: AppNavBar = {
+        let view = AppNavBar(action: UIAction(handler: { _ in
+            if let webview = self.webview, webview.canGoBack {
+                webview.goBack()
+            }
+        }), bgColor: UIColor.navbarColor)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var noInternetView: ErrorView = {
         let view = ErrorView(title: "You are offline. Please try again!", image: Asset.error_dog, buttonTitle: "Retry", buttonAction: UIAction(handler: { [unowned self] _ in
             checkForNetwork()
@@ -31,22 +51,42 @@ class BaseViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     override func loadView() {
         super.loadView()
         let webView = OMFWebView(frame: .zero, configuration: self.webViewConfiguration())
         webView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(webView)
+        
+        baseStackView.addArrangedSubview(appNavbar)
+        baseStackView.addArrangedSubview(webView)
+        
+        self.view.addSubview(baseStackView)
         NSLayoutConstraint.activate([
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            baseStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            baseStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            baseStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            baseStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         webview = webView
         webview?.navigationDelegate = self
+        
+        webview?.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), options: .new, context: nil)
+                
+        appNavbar.isHidden = true
         addRefreshControl()
         addLoadingIndicator()
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "canGoBack" {
+            if let newValue = change?[.newKey] as? Bool {
+                self.appNavbar.isHidden = !newValue
+            }
+        }
+    }
+    
+    deinit {
+        webview?.removeObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack))
     }
     
     override func viewDidLoad() {

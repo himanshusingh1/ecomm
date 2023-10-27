@@ -17,6 +17,11 @@ final class PushNotification: NSObject, UIApplicationDelegate,UNUserNotification
     static var shared = PushNotification()
     var fcmToken: String?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        guard (Bundle.main.url(forResource: "GoogleService-Info", withExtension: "plist") != nil) else {
+            return false
+        }
+        
+        
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         registerForPushNotifications()
